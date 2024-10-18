@@ -1,0 +1,17 @@
+[plugins]
+names = [
+    "plugins.names"
+]
+
+emails = [
+    "plugins.emails"
+]
+
+images = [
+    "plugins.images"
+]
+
+# Network
+[proxy]
+http="http://192.168.43.67:7071"
+https=""
