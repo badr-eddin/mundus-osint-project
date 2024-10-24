@@ -7,12 +7,22 @@ class scrapper:
 
     @staticmethod
     def scrap_google(**kwargs):
-        query = kwargs.get("query")
+        query = kwargs.get("query") or ""
         max_res = kwargs.get("max")
         max_res = max_res if isinstance(max_res, int) and max_res > 0 else 100
         country = kwargs.get("country") or ""
         tbs = kwargs.get("tbs") or ""
         proxy = kwargs.get("proxy") or ""
+        logger = kwargs.get("logger")
+        
+        if proxy:
+            logger.info(f"using proxy: {proxy}")
+    
+        if country:
+            logger.info(f"looking in {country}")
+            
+        logger.info(f"using query: {query}")
+        logger.info(f"result limits: {max_res}")
 
         client = yagooglesearch.SearchClient(
             query=query,
@@ -21,14 +31,13 @@ class scrapper:
             country=country,
             verify_ssl=(not proxy.startswith("http:")),
             tbs=tbs,
-            verbosity=1,
+            verbosity=0,
             http_429_cool_off_time_in_minutes=5
         )
 
         client.search()
 
-        print(client.search_result_list())
-        return {"sites": []}
+        return client.search_result_list
 
 
 class Plugin:
@@ -72,7 +81,8 @@ class Plugin:
 
         proxy = self.utils.config.read("proxy/http")
         results = []
-        google_results = scrapper.scrap_google(proxy=proxy, **(self.kwargs.get("google") or {}))
+        kw = self.kwargs.get("google") or {}
+        google_results = scrapper.scrap_google(proxy=proxy, query=search_query, logger=self.logger, **kw)
 
         results.append(google_results)
 

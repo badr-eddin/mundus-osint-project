@@ -6,7 +6,6 @@ mnd = mundus()
 
 # finding names
 params = {
-    "max": 1,
     "exact": False
 }
 
