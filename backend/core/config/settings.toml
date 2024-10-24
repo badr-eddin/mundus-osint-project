@@ -4,3 +4,7 @@ followers_class_name=""
 following_class_name=""
 name_class_name=""
 description_class_name=""
+
+[drivers]
+firefox="$cwd/core/webdrivers/linux/geckodriver"
+
